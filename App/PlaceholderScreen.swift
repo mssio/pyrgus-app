@@ -8,17 +8,24 @@ struct PlaceholderScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Menu("Password") {
-                    Section("Passwords") {
-                        Text("Password")
-                        Text("Custom Password")
-                        Text("Memorable")
-                        Text("PIN")
+                LabeledContent("Format") {
+                    Menu {
+                        Section("Passwords") {
+                            Button("Password") {}
+                            Button("Custom Password") {}
+                            Button("Memorable") {}
+                            Button("PIN") {}
+                        }
+                        Section("Secrets") {
+                            Button("Secret 128") {}
+                            Button("Secret 256") {}
+                        }
+                    } label: {
+                        Label("Password", systemImage: "chevron.up.chevron.down")
+                            .labelStyle(.trailingIcon)
                     }
-                    Section("Secrets") {
-                        Text("Secret 128")
-                        Text("Secret 256")
-                    }
+                    .menuStyle(.button)
+                    .buttonStyle(.bordered)
                 }
 
                 Text(highlighted)

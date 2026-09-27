@@ -41,7 +41,12 @@ struct CharacterSpec: Equatable {
     }
 }
 
+enum WordlistID: Equatable {
+    case effLarge
+}
+
 struct WordSpec: Equatable {
+    let wordlist: WordlistID
     let wordCount: Int
     let suffixDigits: Int
     let separator: MemorableSeparator
@@ -90,6 +95,7 @@ extension PasswordFormat {
                 "Memorable word count \(options.memorableWordCount) is outside 4...8"
             )
             return .words(WordSpec(
+                wordlist: .effLarge,
                 wordCount: options.memorableWordCount,
                 suffixDigits: 3,
                 separator: options.memorableSeparator,

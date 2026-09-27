@@ -22,3 +22,19 @@ import Testing
         #expect(words.contains(hyphenated))
     }
 }
+
+@Test func malformedWordlistLinesAreRejected() {
+    #expect(Wordlist.parseLine("11111\tabacus") == "abacus")
+    for line in [
+        "1111\tabacus",
+        "11117\tabacus",
+        "11a11\tabacus",
+        "11111\tAbacus",
+        "11111\tabacus!",
+        "11111\t",
+        "11111\tabacus\t",
+        "11111\tabacus\textra",
+    ] {
+        #expect(Wordlist.parseLine(line) == nil)
+    }
+}

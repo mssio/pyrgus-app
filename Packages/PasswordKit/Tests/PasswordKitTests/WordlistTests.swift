@@ -29,6 +29,7 @@ import Testing
         "1111\tabacus",
         "11117\tabacus",
         "11a11\tabacus",
+        "1\u{20E3}1111\tabacus",
         "11111\tAbacus",
         "11111\tabacus!",
         "11111\t",
@@ -37,4 +38,9 @@ import Testing
     ] {
         #expect(Wordlist.parseLine(line) == nil)
     }
+}
+
+@Test func blankWordlistLineIsRejected() {
+    #expect(Wordlist.parseLines("11111\tabacus\n11112\tabdomen\n") == ["abacus", "abdomen"])
+    #expect(Wordlist.parseLines("11111\tabacus\n\n11112\tabdomen\n") == nil)
 }

@@ -12,13 +12,22 @@ public enum Wordlist {
         guard let url = resourceURL, let text = try? String(contentsOf: url, encoding: .utf8) else {
             preconditionFailure("The EFF wordlist resource is missing")
         }
-        let words = text.split(separator: "\n").map { line -> String in
-            guard let word = parseLine(String(line)) else {
-                preconditionFailure("Malformed wordlist line: \(line)")
-            }
-            return word
+        guard let words = parseLines(text) else {
+            preconditionFailure("Malformed EFF wordlist resource")
         }
         precondition(words.count == 7776, "The EFF wordlist must have 7,776 entries, found \(words.count)")
+        return words
+    }
+
+    static func parseLines(_ text: String) -> [String]? {
+        var lines = text.split(separator: "\n", omittingEmptySubsequences: false)
+        if lines.last?.isEmpty == true { lines.removeLast() }
+        var words: [String] = []
+        words.reserveCapacity(lines.count)
+        for line in lines {
+            guard let word = parseLine(String(line)) else { return nil }
+            words.append(word)
+        }
         return words
     }
 
@@ -27,8 +36,8 @@ public enum Wordlist {
         guard fields.count == 2 else { return nil }
         let key = fields[0]
         let word = fields[1]
-        guard key.count == 5,
-              key.allSatisfy({ $0 >= "1" && $0 <= "6" }),
+        guard key.utf8.count == 5,
+              key.utf8.allSatisfy({ (0x31...0x36).contains($0) }),
               word.first?.isASCII == true,
               word.first?.isLowercase == true,
               word.last?.isASCII == true,

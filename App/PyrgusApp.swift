@@ -1,10 +1,15 @@
 import SwiftUI
 
-// Placeholder; replaced by the implementation plan.
 @main
 struct PyrgusApp: App {
     var body: some Scene {
-        WindowGroup { Text("Pyrgus") }
+        WindowGroup {
+            NavigationStack {
+                PlaceholderScreen()
+            }
+        }
+        #if os(macOS)
+        .defaultSize(width: 480, height: 600)
+        #endif
     }
 }
-

@@ -15,6 +15,8 @@ import Testing
     (.memorable, PasswordOptions(), "•••-•••-•••-•••-•••-•••-•••", "Copied"),
     (.memorable, PasswordOptions(memorableWordCount: 4, memorableSeparator: .space), "••• ••• ••• ••• •••", "Copied"),
     (.pin, PasswordOptions(pinLength: .four), "••••", "Copied"),
+    (.pin, PasswordOptions(pinLength: .six), "••••••", "Copied"),
+    (.pin, PasswordOptions(pinLength: .eight), "••••••••", "Copied"),
     (.secret128, PasswordOptions(), "••••••••••••••••", "128-bit secret copied"),
     (.secret256, PasswordOptions(), "••••••••••••••••", "256-bit secret copied"),
 ])

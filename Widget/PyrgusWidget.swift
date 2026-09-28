@@ -1,7 +1,8 @@
+import AppIntents
 import SwiftUI
 import WidgetKit
 
-// Placeholder; replaced by the implementation plan.
+// Spike: one button that copies a Password with the default options. Task 14 replaces this file.
 @main
 struct PyrgusWidgets: WidgetBundle {
     var body: some Widget { PyrgusWidget() }
@@ -9,8 +10,13 @@ struct PyrgusWidgets: WidgetBundle {
 
 struct PyrgusWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "PyrgusWidget", provider: Provider()) { _ in Text("Pyrgus") }
-            .supportedFamilies([.systemSmall, .systemMedium])
+        StaticConfiguration(kind: "PyrgusWidget", provider: Provider()) { _ in
+            Button(intent: GenerateAndCopyIntent()) {
+                Label("Copy a Password", systemImage: "doc.on.doc")
+            }
+            .containerBackground(.fill.tertiary, for: .widget)
+        }
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
@@ -25,4 +31,3 @@ struct Provider: TimelineProvider {
 }
 
 struct SimpleEntry: TimelineEntry { let date: Date }
-

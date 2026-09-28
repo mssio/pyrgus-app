@@ -48,3 +48,12 @@ public enum Wordlist {
         return String(word)
     }
 }
+
+extension WordlistID {
+    /// The entries of this word list.
+    var words: [String] {
+        switch self {
+        case .effLarge: Wordlist.words
+        }
+    }
+}

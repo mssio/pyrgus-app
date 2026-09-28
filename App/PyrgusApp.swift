@@ -9,7 +9,7 @@ struct PyrgusApp: App {
             }
         }
         #if os(macOS)
-        .defaultSize(width: 480, height: 600)
+        .defaultSize(width: 520, height: 385)
         #endif
     }
 }

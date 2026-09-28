@@ -1,9 +1,33 @@
 import PasswordKit
 import SwiftUI
 
+/// Compact on iPhone and narrow iPad windows; large on a full-width iPad and on the Mac.
+private enum LayoutScale {
+    case compact, large
+
+    var columnWidth: CGFloat { self == .large ? 560 : 420 }
+    var secretFont: Font.TextStyle { self == .large ? .largeTitle : .title2 }
+    var bodyFont: Font { self == .large ? .title3 : .body }
+    var captionFont: Font { self == .large ? .callout : .footnote }
+    var controlSize: ControlSize { self == .large ? .large : .regular }
+}
+
 struct PasswordScreen: View {
     @State private var model = PasswordModel()
     @State private var showingAbout = false
+
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    #endif
+
+    private var scale: LayoutScale {
+        #if os(macOS)
+        .large
+        #else
+        horizontalSizeClass == .regular && verticalSizeClass == .regular ? .large : .compact
+        #endif
+    }
 
     var body: some View {
         ScrollView {
@@ -30,10 +54,10 @@ struct PasswordScreen: View {
 
                 FormatOptionsView(format: model.format, options: $model.options)
 
-                SecretView(secret: model.password, onCopy: model.copy)
+                SecretView(secret: model.password, scale: scale, onCopy: model.copy)
 
                 Text(model.entropyCaption)
-                    .font(.footnote)
+                    .font(scale.captionFont)
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
@@ -44,9 +68,12 @@ struct PasswordScreen: View {
                 }
             }
             .padding()
-            .frame(maxWidth: 420)
+            .font(scale.bodyFont)
+            .controlSize(scale.controlSize)
+            .frame(maxWidth: scale.columnWidth)
             .frame(maxWidth: .infinity)
         }
+        .defaultScrollAnchor(.center, for: .alignment)
         .navigationTitle("Pyrgus")
         .toolbar {
             Button("About", systemImage: "info.circle") { showingAbout = true }
@@ -62,11 +89,12 @@ struct PasswordScreen: View {
 /// The secret: monospaced, digits in indigo, wrapping and never truncated, spelled out for VoiceOver.
 private struct SecretView: View {
     let secret: String
+    let scale: LayoutScale
     let onCopy: () -> Void
 
     var body: some View {
         Text(highlighted)
-            .font(.system(.title2, design: .monospaced))
+            .font(.system(scale.secretFont, design: .monospaced))
             .multilineTextAlignment(.center)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)

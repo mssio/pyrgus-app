@@ -33,23 +33,18 @@ struct PasswordScreen: View {
         ScrollView {
             VStack(spacing: 24) {
                 LabeledContent("Format") {
-                    Menu {
-                        Picker("Format", selection: $model.format) {
-                            Section("Passwords") {
-                                ForEach(PasswordFormat.allCases.filter { !$0.isSecret }) { Text($0.displayName).tag($0) }
-                            }
-                            Section("Secrets") {
-                                ForEach(PasswordFormat.allCases.filter(\.isSecret)) { Text($0.displayName).tag($0) }
-                            }
+                    // A menu Picker is the native pop-up button on each platform: one ⌃⌄, no submenu.
+                    Picker("Format", selection: $model.format) {
+                        Section("Passwords") {
+                            ForEach(PasswordFormat.allCases.filter { !$0.isSecret }) { Text($0.displayName).tag($0) }
                         }
-                    } label: {
-                        Label(model.format.displayName, systemImage: "chevron.up.chevron.down")
-                            .labelStyle(.trailingIcon)
+                        Section("Secrets") {
+                            ForEach(PasswordFormat.allCases.filter(\.isSecret)) { Text($0.displayName).tag($0) }
+                        }
                     }
-                    .menuStyle(.button)
+                    .pickerStyle(.menu)
+                    .labelsHidden()
                     .buttonStyle(.bordered)
-                    .accessibilityLabel("Format")
-                    .accessibilityValue(model.format.displayName)
                 }
 
                 FormatOptionsView(format: model.format, options: $model.options)

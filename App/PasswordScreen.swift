@@ -80,12 +80,17 @@ private struct SecretView: View {
             .accessibilityAction(named: "Copy", onCopy)
     }
 
+    /// Display only — never copied or read by VoiceOver, both of which use `secret` directly. A
+    /// zero-width space (U+200B) after every character gives the line breaker a break opportunity
+    /// at any position, so long tokens wrap without automatic hyphenation inserting a visible "-"
+    /// that isn't part of the secret.
     private var highlighted: AttributedString {
         var result = AttributedString()
         for character in secret {
             var piece = AttributedString(String(character))
             if character.isASCII, character.isNumber { piece.foregroundColor = .indigo }
             result += piece
+            result += AttributedString("\u{200B}")
         }
         return result
     }

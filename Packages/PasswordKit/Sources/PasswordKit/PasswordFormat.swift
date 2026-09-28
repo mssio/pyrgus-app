@@ -53,6 +53,14 @@ struct WordSpec: Equatable {
     let capitalizeFirst: Bool
 }
 
+extension WordSpec {
+    /// Memorable's constants: the EFF large wordlist, a three-digit suffix, and capitalized words.
+    static func memorable(wordCount: Int, separator: MemorableSeparator) -> WordSpec {
+        WordSpec(wordlist: .effLarge, wordCount: wordCount, suffixDigits: 3, separator: separator,
+                 capitalizeFirst: true)
+    }
+}
+
 struct HexSpec: Equatable {
     let byteCount: Int
 }
@@ -94,13 +102,7 @@ extension PasswordFormat {
                 PasswordOptions.memorableWordCountRange.contains(options.memorableWordCount),
                 "Memorable word count \(options.memorableWordCount) is outside 4...8"
             )
-            return .words(WordSpec(
-                wordlist: .effLarge,
-                wordCount: options.memorableWordCount,
-                suffixDigits: 3,
-                separator: options.memorableSeparator,
-                capitalizeFirst: true
-            ))
+            return .words(.memorable(wordCount: options.memorableWordCount, separator: options.memorableSeparator))
         case .pin:
             return .characters(CharacterSpec(
                 length: options.pinLength.rawValue,

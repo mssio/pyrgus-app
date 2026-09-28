@@ -5,7 +5,7 @@ struct PyrgusApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                PlaceholderScreen()
+                PasswordScreen()
             }
         }
         #if os(macOS)

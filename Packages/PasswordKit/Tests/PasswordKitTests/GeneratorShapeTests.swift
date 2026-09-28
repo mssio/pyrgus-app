@@ -63,7 +63,7 @@ func secretsAreLowercaseHexWithNoSeparators(format: PasswordFormat, length: Int)
 
 private let capitalizedWords = Set(Wordlist.words.map { $0.prefix(1).uppercased() + $0.dropFirst() })
 
-@Test(arguments: [4, 6, 8], MemorableSeparator.allCases)
+@Test(arguments: Array(4...8), MemorableSeparator.allCases)
 func memorableHasCapitalizedWordsAndAThreeDigitSuffix(wordCount: Int, separator: MemorableSeparator) {
     let options = PasswordOptions(memorableWordCount: wordCount, memorableSeparator: separator)
     for value in generate(.memorable, options) {

@@ -20,6 +20,11 @@ import Testing
     #expect(PasswordFormat.allCases.filter(\.isSecret) == [.secret128, .secret256])
 }
 
+@Test func rawValuesAreTheStoredAndWebIDs() {
+    #expect(PasswordFormat.allCases.map(\.rawValue)
+        == ["standard", "strong", "memorable", "pin", "secret128", "secret256"])
+}
+
 @Test func memorableSpecCarriesEFFWordlistIdentifier() {
     #expect(PasswordFormat.memorable.spec(PasswordOptions()) == .words(WordSpec(
         wordlist: .effLarge,

@@ -9,7 +9,7 @@ public enum CharacterSets {
     public static let strongLower = "abcdefghijklmnopqrstuvwxyz"
     public static let strongUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     public static let strongDigits = "0123456789"
-    /// No quotes, backslash or backtick, so values survive shell, CSV and JSON unescaped.
+    /// No quotes, backslash or backtick, so values survive single-quoted shell strings, CSV and JSON without escaping.
     public static let strongSymbols = "!@#$%^&*-_=+?"
     public static let pin = "0123456789"
     public static let hex = "0123456789abcdef"

@@ -71,7 +71,7 @@ final class PasswordModel {
         let copyNumber = copies
         Task {
             try? await Task.sleep(for: .seconds(2))
-            // A newer copy, or a regenerate, owns the label now.
+            // A newer copy owns the label now; a regenerate already cleared it.
             if copies == copyNumber { justCopied = false }
         }
     }

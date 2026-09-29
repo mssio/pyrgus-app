@@ -54,7 +54,7 @@ Before claiming any task done: `swift test` passes and both builds print `** BUI
 
 - `PasswordKit` imports no UI framework. Platform code lives only in `PasswordClipboard`.
 - Formats are data (`PasswordFormat.spec`), not branches in the generator.
-- `#if os(...)` only for the clipboard, haptics and window sizing.
+- `#if os(...)` only for the clipboard, haptics, window sizing and the Mac About window.
 - Swift 6 language mode. Tests use Swift Testing (`import Testing`); PasswordKit is test-first.
 - Views are presentational; `PasswordModel` owns screen state.
 

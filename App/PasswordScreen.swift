@@ -14,11 +14,15 @@ private enum LayoutScale {
 
 struct PasswordScreen: View {
     @State private var model = PasswordModel()
-    @State private var showingAbout = false
 
     #if os(iOS)
+    @State private var showingAbout = false
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    #endif
+
+    #if os(macOS)
+    @Environment(\.openWindow) private var openWindow
     #endif
 
     private var scale: LayoutScale {
@@ -71,10 +75,16 @@ struct PasswordScreen: View {
         .defaultScrollAnchor(.center, for: .alignment)
         .navigationTitle("Pyrgus")
         .toolbar {
-            Button("About", systemImage: "info.circle") { showingAbout = true }
+            Button("About", systemImage: "info.circle") {
+                #if os(macOS)
+                openWindow(id: AboutWindow.id)
+                #else
+                showingAbout = true
+                #endif
+            }
         }
-        .sheet(isPresented: $showingAbout) { AboutSheet() }
         #if os(iOS)
+        .sheet(isPresented: $showingAbout) { AboutSheet() }
         .sensoryFeedback(.impact(weight: .light), trigger: model.generations)
         .sensoryFeedback(.success, trigger: model.copies)
         #endif

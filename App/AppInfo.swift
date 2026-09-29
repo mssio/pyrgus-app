@@ -12,10 +12,8 @@ enum AppInfo {
 }
 
 extension Bundle {
-    /// The marketing version and build number, for example "1.0.1 (2)".
+    /// The marketing version, for example "1.0.2". The build number is never shown.
     var appVersion: String {
-        let version = object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
-        let build = object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"
-        return "\(version) (\(build))"
+        object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
     }
 }

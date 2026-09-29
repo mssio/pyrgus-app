@@ -7,11 +7,15 @@ struct AboutSheet: View {
         NavigationStack {
             List {
                 Section {
-                    Text("Passwords and keys are generated on this device and never leave it. No account, no network.")
+                    Text(AppInfo.privacyNote)
                 }
                 Section("Credits") {
-                    Text("Memorable passwords use the EFF long wordlist, licensed CC BY 3.0 US.")
-                    Link("EFF wordlists", destination: URL(string: "https://www.eff.org/dice")!)
+                    Text(AppInfo.creditNote)
+                    Link("EFF wordlists", destination: AppInfo.effWordlistsURL)
+                }
+                Section {
+                    Link("Support", destination: AppInfo.supportURL)
+                    Link("Privacy Policy", destination: AppInfo.privacyURL)
                 }
                 Section {
                     LabeledContent("Version", value: Bundle.main.appVersion)
@@ -25,13 +29,5 @@ struct AboutSheet: View {
         #if os(macOS)
         .frame(minWidth: 380, minHeight: 320)
         #endif
-    }
-}
-
-private extension Bundle {
-    var appVersion: String {
-        let version = object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
-        let build = object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"
-        return "\(version) (\(build))"
     }
 }

@@ -1,3 +1,4 @@
+#if os(iOS)
 import SwiftUI
 
 struct AboutSheet: View {
@@ -26,8 +27,6 @@ struct AboutSheet: View {
                 ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }
         }
-        #if os(macOS)
-        .frame(minWidth: 380, minHeight: 320)
-        #endif
     }
 }
+#endif

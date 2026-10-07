@@ -73,6 +73,7 @@ struct PasswordScreen: View {
             .frame(maxWidth: .infinity)
         }
         .defaultScrollAnchor(.center, for: .alignment)
+        .scrollBounceBehavior(.basedOnSize)
         .navigationTitle("Pyrgus")
         .toolbar {
             Button("About", systemImage: "info.circle") {

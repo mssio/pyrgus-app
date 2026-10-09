@@ -32,19 +32,25 @@ Before claiming any task done: `swift test` passes and both builds print `** BUI
 
 ## Git workflow
 
-- Never commit to `main`. Cut a feature branch (`feat/…`, `fix/…`, `chore/…`, `docs/…`) from an
-  up-to-date `origin/main`.
-- Finish a feature task by pushing its branch. **Open no PR**; feature branches wait for a release.
-- A release collects finished feature branches: cut
-  `release/<MARKETING_VERSION>+<CURRENT_PROJECT_VERSION>` from `origin/main`, merge each feature
-  branch into it with `git merge --no-ff`, commit the version bump in `project.yml`
-  (`CURRENT_PROJECT_VERSION` always goes up and never resets), push, and open a **draft** PR with
-  `gh pr create --draft`. Only release branches get a PR. The user marks it ready and merges
-  (squash).
+- Never commit to `main`. When work for the next version starts, cut `release/<version>`
+  (`MARKETING_VERSION`, e.g. `release/1.0.3`) from an up-to-date `origin/main`. Branch names and
+  tags use the version only, never the build number.
+- Cut each feature branch (`feat/…`, `fix/…`, `chore/…`, `docs/…`) from the open release branch
+  (from `origin/main` if none is open). Finish a feature task by pushing it and merging it into the
+  release branch with `git merge --no-ff`. **Open no PR.**
+- The last commit on a release branch is the version bump (`MARKETING_VERSION` and
+  `CURRENT_PROJECT_VERSION` in `project.yml`). Push it and open a **draft** PR with
+  `gh pr create --draft`; only release branches get a PR. The user marks it ready and merges it
+  with a **merge commit**, not squash.
+- The build (`CURRENT_PROJECT_VERSION`) goes up with every upload, in upload order, and never
+  resets. A released version can't be submitted again, so every App Store release raises
+  `MARKETING_VERSION`.
 - After the merge, clean up before tagging: delete the release branch and the feature branches it
   merged, local and remote, then `git worktree prune` and `git fetch --prune`. Then tag the merge
-  commit `v<MARKETING_VERSION>+<CURRENT_PROJECT_VERSION>` (annotated, pushed, never moved). Full
-  rules: the workspace `AGENTS.md`.
+  commit `v<version>` (annotated, pushed, never moved).
+- Hotfix for the live version while a release branch is open: `release/<next patch>` from `main`
+  with only the fix; the open release branch moves to the patch after it. Full rules: the workspace
+  `AGENTS.md`.
 - Never commit `Pyrgus.xcodeproj`, the generated `Info.plist` files or build output.
 
 ## Security rules (non-negotiable)

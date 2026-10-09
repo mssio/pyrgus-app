@@ -8,8 +8,8 @@ for this repo's code.
 
 Pyrgus: a native iPhone, iPad and Mac app, plus an iOS/iPadOS Home Screen widget, that generates
 passwords and secret keys on-device with the system CSPRNG. No network, no account. The spec at
-`../docs/app/2026-09-26-pyrgus-apple-design.md` (outside this repo) is the source of truth; a change
-to the design updates it in a paired commit.
+`../docs/app/specs/2026-09-26-pyrgus-apple-design.md` (outside this repo) is the source of truth; a
+change to the design updates it in a paired commit.
 
 ## Commands
 
@@ -67,4 +67,5 @@ working here.
 
 ## Scope
 
-Change code only inside this repository; docs go in `../docs/app/`.
+Change code only inside this repository; specs go in `../docs/app/specs/`, plans in
+`../docs/app/plans/`.

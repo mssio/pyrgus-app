@@ -32,32 +32,25 @@ Before claiming any task done: `swift test` passes and both builds print `** BUI
 
 ## Git workflow
 
-Standard Git Flow; the full rules are in the workspace `AGENTS.md`. `main` holds released versions
-only and `develop` the next one; never commit to either directly. The user names each task a
-feature, a release or a hotfix.
+Standard Git Flow, the same as `pyrgus-web`; the full rules (feature, release, hotfix, after the
+merge, versions, changelog, no worktrees) are in the workspace `AGENTS.md`. In short: features
+branch from `develop` and merge back with no PR; releases and hotfixes end in a draft PR into
+`main`. Never commit work to `main` or `develop` directly.
 
-- **Feature:** `feature/<topic>` from an up-to-date `origin/develop`. When done, merge it into
-  `develop` with `git merge --no-ff`, push `develop`, and delete the feature branch, local and
-  remote. **No PR.**
-- **Release** (the user gives the version): `release/<version>` from `origin/develop`. Any tweaks,
-  then the production commit, `chore: release <version> (<build>)`: `PYRGUS_CHANNEL: release`,
-  `MARKETING_VERSION`, and one more `CURRENT_PROJECT_VERSION`. Push and open a **draft** PR into
-  `main` (`gh pr create --draft --base main`).
-- **Hotfix** (the user gives the version and the fix): `hotfix/<version>` from `origin/main`. The
-  fix, then the production commit as for a release. Push and open a **draft** PR into `main`.
-- The user merges release and hotfix PRs on GitHub with **Create a merge commit**, never squash.
-  Then: tag the merge commit on `main` `v<version>` (annotated, message
-  `Pyrgus <version> (<build>)`, pushed, never moved); merge `main` into `develop` with `--no-ff`,
-  setting `PYRGUS_CHANNEL: beta` and the next `MARKETING_VERSION` and keeping the higher
-  `CURRENT_PROJECT_VERSION`; push `develop`; delete the release or hotfix branch, local and remote;
-  `git fetch --prune` and `git worktree prune`.
-- `develop` is always a beta (`PYRGUS_CHANNEL: beta`) carrying the next version. `MARKETING_VERSION`
-  is plain numbers only (`1.0.3`, never `1.0.3-beta`): App Store Connect rejects anything else.
-- The build (`CURRENT_PROJECT_VERSION`) is one counter across all branches. Raise it in a
+- **Version:** `MARKETING_VERSION` in `project.yml`, three plain numbers (`1.0.3`, never
+  `1.0.3-beta`): App Store Connect rejects anything else. `develop` carries the next version.
+- **Channel:** `develop` is always a beta (`PYRGUS_CHANNEL: beta`). The production commit,
+  `chore: release <version> (<build>)`, sets `PYRGUS_CHANNEL: release`, the version and one more
+  `CURRENT_PROJECT_VERSION`; the merge back into `develop` sets `beta` and the next version again.
+- **Build:** `CURRENT_PROJECT_VERSION` is one counter across all branches. Raise it in a
   `chore: build <n> for TestFlight` commit right before each upload, on the branch being uploaded;
   never reset it, and on any merge keep the higher value. The Mac App Store needs every upload's
-  build higher than all earlier ones. Betas are archived from `develop`, releases from their tag.
+  build higher than all earlier ones. Betas are archived from `develop`, releases from their tag;
+  the tag message is `Pyrgus <version> (<build>)`.
+- **Changelog:** every feature adds its user-visible change under `[Unreleased]` in `CHANGELOG.md`
+  before merging into `develop`.
 - Never commit `Pyrgus.xcodeproj`, the generated `Info.plist` files or build output.
+- Spec and plan edits are committed in the workspace repo, paired with the code commits here.
 
 ## Security rules (non-negotiable)
 

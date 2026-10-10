@@ -4,7 +4,7 @@ import PasswordKit
 /// Each widget's configuration: a format and only that format's options.
 struct SelectFormatIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Choose Format"
-    static let description = IntentDescription("Choose what the widget copies.")
+    static let description = IntentDescription("Choose the widget's format and options.")
 
     @Parameter(title: "Format", default: .standard)
     var format: FormatChoice
@@ -12,14 +12,14 @@ struct SelectFormatIntent: WidgetConfigurationIntent {
     @Parameter(title: "PIN length", default: .six)
     var pinLength: PinLengthChoice
 
-    @Parameter(title: "Length", default: 24, inclusiveRange: (6, 32))
-    var customLength: Int
+    @Parameter(title: "Length", default: .length24)
+    var customLength: CustomLengthChoice
 
     @Parameter(title: "Include symbols", default: true)
     var includeSymbols: Bool
 
-    @Parameter(title: "Words", default: 6, inclusiveRange: (4, 8))
-    var wordCount: Int
+    @Parameter(title: "Words", default: .six)
+    var wordCount: WordCountChoice
 
     @Parameter(title: "Separator", default: .hyphen)
     var separator: SeparatorChoice
@@ -51,9 +51,9 @@ struct SelectFormatIntent: WidgetConfigurationIntent {
     var options: PasswordOptions {
         PasswordOptions.validated(
             pinLength: pinLength.rawValue,
-            customLength: customLength,
+            customLength: customLength.rawValue,
             includeSymbols: includeSymbols,
-            memorableWordCount: wordCount,
+            memorableWordCount: wordCount.rawValue,
             memorableSeparator: separator.rawValue
         )
     }

@@ -1,7 +1,8 @@
 # Pyrgus
 
 Passwords and secret keys for iPhone, iPad and Mac, generated on-device with the system CSPRNG.
-No account, no network. A Home Screen widget copies a new secret without ever showing it.
+No account, no network. A Home Screen widget opens Pyrgus to copy or regenerate a secret,
+never showing it on the Home Screen.
 
 Formats: Password, Custom Password (6–32 characters, symbols optional), Memorable (4–8 EFF words),
 PIN (4, 6 or 8 digits), Secret 128 and Secret 256 (hex). The web version is

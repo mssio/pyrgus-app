@@ -32,27 +32,31 @@ Before claiming any task done: `swift test` passes and both builds print `** BUI
 
 ## Git workflow
 
-- Never commit to `main`. When work for the next version starts, cut `release/<version>`
-  (`MARKETING_VERSION`, e.g. `release/1.0.3`) from an up-to-date `origin/main`. Branch names and
-  tags use the version only, never the build number.
-- Cut each feature branch (`feat/…`, `fix/…`, `chore/…`, `docs/…`) from the open release branch
-  (from `origin/main` if none is open). Finish a feature task by pushing it and merging it into the
-  release branch with `git merge --no-ff`. **Open no PR.**
-- A new release branch's first commit sets `PYRGUS_CHANNEL: beta` in `project.yml`. Each TestFlight
-  upload is its own commit raising `CURRENT_PROJECT_VERSION` (`chore: build <n> for TestFlight`).
-- The last commit on a release branch is the release commit: `PYRGUS_CHANNEL: release`, one more
-  `CURRENT_PROJECT_VERSION`, and `MARKETING_VERSION` if it changes. Push it and open a **draft** PR
-  with `gh pr create --draft`; only release branches get a PR. The user marks it ready and merges it
-  with a **merge commit**, not squash. The release is archived from the tag.
-- The build (`CURRENT_PROJECT_VERSION`) goes up with every upload, in upload order, and never
-  resets. A released version can't be submitted again, so every App Store release raises
-  `MARKETING_VERSION`.
-- After the merge, clean up before tagging: delete the release branch and the feature branches it
-  merged, local and remote, then `git worktree prune` and `git fetch --prune`. Then tag the merge
-  commit `v<version>` (annotated, pushed, never moved).
-- Hotfix for the live version while a release branch is open: `release/<next patch>` from `main`
-  with only the fix; the open release branch moves to the patch after it. Full rules: the workspace
-  `AGENTS.md`.
+Standard Git Flow; the full rules are in the workspace `AGENTS.md`. `main` holds released versions
+only and `develop` the next one; never commit to either directly. The user names each task a
+feature, a release or a hotfix.
+
+- **Feature:** `feature/<topic>` from an up-to-date `origin/develop`. When done, merge it into
+  `develop` with `git merge --no-ff`, push `develop`, and delete the feature branch, local and
+  remote. **No PR.**
+- **Release** (the user gives the version): `release/<version>` from `origin/develop`. Any tweaks,
+  then the production commit, `chore: release <version> (<build>)`: `PYRGUS_CHANNEL: release`,
+  `MARKETING_VERSION`, and one more `CURRENT_PROJECT_VERSION`. Push and open a **draft** PR into
+  `main` (`gh pr create --draft --base main`).
+- **Hotfix** (the user gives the version and the fix): `hotfix/<version>` from `origin/main`. The
+  fix, then the production commit as for a release. Push and open a **draft** PR into `main`.
+- The user merges release and hotfix PRs on GitHub with **Create a merge commit**, never squash.
+  Then: tag the merge commit on `main` `v<version>` (annotated, message
+  `Pyrgus <version> (<build>)`, pushed, never moved); merge `main` into `develop` with `--no-ff`,
+  setting `PYRGUS_CHANNEL: beta` and the next `MARKETING_VERSION` and keeping the higher
+  `CURRENT_PROJECT_VERSION`; push `develop`; delete the release or hotfix branch, local and remote;
+  `git fetch --prune` and `git worktree prune`.
+- `develop` is always a beta (`PYRGUS_CHANNEL: beta`) carrying the next version. `MARKETING_VERSION`
+  is plain numbers only (`1.0.3`, never `1.0.3-beta`): App Store Connect rejects anything else.
+- The build (`CURRENT_PROJECT_VERSION`) is one counter across all branches. Raise it in a
+  `chore: build <n> for TestFlight` commit right before each upload, on the branch being uploaded;
+  never reset it, and on any merge keep the higher value. The Mac App Store needs every upload's
+  build higher than all earlier ones. Betas are archived from `develop`, releases from their tag.
 - Never commit `Pyrgus.xcodeproj`, the generated `Info.plist` files or build output.
 
 ## Security rules (non-negotiable)

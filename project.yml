@@ -78,8 +78,6 @@ targets:
     dependencies:
       - package: PasswordKit
         product: PasswordKit
-      - package: PasswordKit
-        product: PasswordClipboard
     info:
       path: Widget/Info.plist
       properties:

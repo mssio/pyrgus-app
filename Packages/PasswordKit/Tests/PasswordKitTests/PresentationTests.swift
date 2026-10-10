@@ -10,18 +10,16 @@ import Testing
 }
 
 @Test(arguments: [
-    (PasswordFormat.standard, PasswordOptions(), "••••••-••••••-••••••", "Copied"),
-    (.strong, PasswordOptions(customLength: 12), "••••••••••••••••", "12 characters copied"),
-    (.memorable, PasswordOptions(), "•••-•••-•••-•••-•••-•••-•••", "Copied"),
-    (.memorable, PasswordOptions(memorableWordCount: 4, memorableSeparator: .space), "••• ••• ••• ••• •••", "Copied"),
-    (.pin, PasswordOptions(pinLength: .four), "••••", "Copied"),
-    (.pin, PasswordOptions(pinLength: .six), "••••••", "Copied"),
-    (.pin, PasswordOptions(pinLength: .eight), "••••••••", "Copied"),
-    (.secret128, PasswordOptions(), "••••••••••••••••", "128-bit secret copied"),
-    (.secret256, PasswordOptions(), "••••••••••••••••", "256-bit secret copied"),
+    (PasswordFormat.standard, PasswordOptions(), "••••••-••••••-••••••"),
+    (.strong, PasswordOptions(customLength: 12), "••••••••••••••••"),
+    (.memorable, PasswordOptions(), "•••-•••-•••-•••-•••-•••-•••"),
+    (.memorable, PasswordOptions(memorableWordCount: 4, memorableSeparator: .space), "••• ••• ••• ••• •••"),
+    (.pin, PasswordOptions(pinLength: .four), "••••"),
+    (.pin, PasswordOptions(pinLength: .six), "••••••"),
+    (.pin, PasswordOptions(pinLength: .eight), "••••••••"),
+    (.secret128, PasswordOptions(), "••••••••••••••••"),
+    (.secret256, PasswordOptions(), "••••••••••••••••"),
 ])
-func maskShowsStructureNeverContent(format: PasswordFormat, options: PasswordOptions, dots: String, caption: String) {
-    let mask = SecretMask(format: format, options: options)
-    #expect(mask.dots == dots)
-    #expect(mask.caption == caption)
+func maskShowsStructureNeverContent(format: PasswordFormat, options: PasswordOptions, dots: String) {
+    #expect(SecretMask(format: format, options: options) == SecretMask(dots: dots))
 }

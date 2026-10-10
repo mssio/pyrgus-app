@@ -14,7 +14,7 @@ struct PyrgusWidget: Widget {
             PyrgusWidgetView(entry: $0)
         }
         .configurationDisplayName("Pyrgus")
-        .description("Copies a new password or key without ever showing it.")
+        .description("Opens Pyrgus to copy or regenerate a password, never showing it on the Home Screen.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -23,59 +23,76 @@ struct Entry: TimelineEntry {
     let date: Date
     let format: PasswordFormat
     let options: PasswordOptions
-    let copied: Bool
 }
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> Entry {
-        Entry(date: .now, format: .standard, options: PasswordOptions(), copied: false)
+        Entry(date: .now, format: .standard, options: PasswordOptions())
     }
 
     func snapshot(for configuration: SelectFormatIntent, in context: Context) async -> Entry {
-        Entry(date: .now, format: configuration.format.format, options: configuration.options, copied: false)
+        Entry(date: .now, format: configuration.format.format, options: configuration.options)
     }
 
-    /// Shows "copied" until the clipboard expires, then returns to "Tap to copy".
+    /// The widget shows only its configuration, so one entry lasts until the configuration changes.
     func timeline(for configuration: SelectFormatIntent, in context: Context) async -> Timeline<Entry> {
-        let format = configuration.format.format
-        let options = configuration.options
-        let now = Date.now
-        let idle = Entry(date: now, format: format, options: options, copied: false)
-        guard let copiedAt = CopiedState.copiedAt(format: format, options: options),
-              now < copiedAt.addingTimeInterval(CopiedState.showFor)
-        else { return Timeline(entries: [idle], policy: .never) }
-        let expiry = copiedAt.addingTimeInterval(CopiedState.showFor)
-        return Timeline(entries: [
-            Entry(date: now, format: format, options: options, copied: true),
-            Entry(date: expiry, format: format, options: options, copied: false),
-        ], policy: .never)
+        Timeline(entries: [await snapshot(for: configuration, in: context)], policy: .never)
     }
 }
 
-/// Never displays a secret: only the format's structure as a mask.
+/// Never displays a secret: only the format's structure as a mask. Copy and Regenerate open Pyrgus,
+/// because iOS refuses a pasteboard write from the widget extension.
 struct PyrgusWidgetView: View {
+    @Environment(\.widgetFamily) private var family
     let entry: Entry
 
     var body: some View {
-        let mask = SecretMask(format: entry.format, options: entry.options)
-        Button(intent: GenerateAndCopyIntent(format: entry.format, options: entry.options)) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(entry.format.displayName)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(mask.dots)
-                    .font(.system(.body, design: .monospaced))
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(3)
-                Spacer(minLength: 0)
-                Label(entry.copied ? mask.caption : "Tap to copy",
-                      systemImage: entry.copied ? "checkmark.circle.fill" : "doc.on.doc")
-                    .font(.caption.bold())
+        let name = entry.format.displayName
+        Group {
+            if family == .systemSmall {
+                content {
+                    Label("Copy in Pyrgus", systemImage: "doc.on.doc")
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Copy a \(name) in Pyrgus")
+                .accessibilityAddTraits(.isButton)
+                .widgetURL(url(.copy))
+            } else {
+                content {
+                    HStack {
+                        Link(destination: url(.copy)) {
+                            Label("Copy", systemImage: "doc.on.doc")
+                        }
+                        .accessibilityLabel("Copy a \(name) in Pyrgus")
+                        Spacer()
+                        Link(destination: url(.regenerate)) {
+                            Label("Regenerate", systemImage: "arrow.clockwise")
+                        }
+                        .accessibilityLabel("Regenerate a \(name) in Pyrgus")
+                    }
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(entry.copied ? mask.caption : "Copy a new \(entry.format.displayName)")
         .containerBackground(.fill.tertiary, for: .widget)
+    }
+
+    private func content(@ViewBuilder footer: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(entry.format.displayName)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text(SecretMask(format: entry.format, options: entry.options).dots)
+                .font(.system(.body, design: .monospaced))
+                .minimumScaleFactor(0.5)
+                .lineLimit(3)
+            Spacer(minLength: 0)
+            footer()
+                .font(.caption.bold())
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+    }
+
+    private func url(_ action: WidgetLink.Action) -> URL {
+        WidgetLink(action: action, format: entry.format, options: entry.options).url
     }
 }

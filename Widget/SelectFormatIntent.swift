@@ -12,14 +12,14 @@ struct SelectFormatIntent: WidgetConfigurationIntent {
     @Parameter(title: "PIN length", default: .six)
     var pinLength: PinLengthChoice
 
-    @Parameter(title: "Length", optionsProvider: CustomLengthOptions())
-    var customLength: Int?
+    @Parameter(title: "Length", default: .length24)
+    var customLength: CustomLengthChoice
 
     @Parameter(title: "Include symbols", default: true)
     var includeSymbols: Bool
 
-    @Parameter(title: "Words", optionsProvider: WordCountOptions())
-    var wordCount: Int?
+    @Parameter(title: "Words", default: .six)
+    var wordCount: WordCountChoice
 
     @Parameter(title: "Separator", default: .hyphen)
     var separator: SeparatorChoice
@@ -51,23 +51,10 @@ struct SelectFormatIntent: WidgetConfigurationIntent {
     var options: PasswordOptions {
         PasswordOptions.validated(
             pinLength: pinLength.rawValue,
-            customLength: customLength,
+            customLength: customLength.rawValue,
             includeSymbols: includeSymbols,
-            memorableWordCount: wordCount,
+            memorableWordCount: wordCount.rawValue,
             memorableSeparator: separator.rawValue
         )
     }
-}
-
-/// Custom Password's lengths as a list to pick from. `default:` and `inclusiveRange:` can't be
-/// combined with an options provider on iOS 18, so the default comes from `defaultResult()`.
-struct CustomLengthOptions: DynamicOptionsProvider {
-    func results() async throws -> [Int] { Array(PasswordOptions.customLengthRange) }
-    func defaultResult() async -> Int? { PasswordOptions().customLength }
-}
-
-/// Memorable's word counts as a list to pick from.
-struct WordCountOptions: DynamicOptionsProvider {
-    func results() async throws -> [Int] { Array(PasswordOptions.memorableWordCountRange) }
-    func defaultResult() async -> Int? { PasswordOptions().memorableWordCount }
 }

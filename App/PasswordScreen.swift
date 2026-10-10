@@ -89,6 +89,11 @@ struct PasswordScreen: View {
         #endif
         #if os(iOS)
         .sheet(isPresented: $showingAbout) { AboutSheet() }
+        .onOpenURL { url in
+            guard let link = WidgetLink(url: url) else { return }
+            showingAbout = false
+            model.open(link)
+        }
         .sensoryFeedback(.impact(weight: .light), trigger: model.generations)
         .sensoryFeedback(.success, trigger: model.copies)
         #endif

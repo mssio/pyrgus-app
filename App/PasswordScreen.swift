@@ -84,6 +84,9 @@ struct PasswordScreen: View {
                 #endif
             }
         }
+        #if os(macOS)
+        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
+        #endif
         #if os(iOS)
         .sheet(isPresented: $showingAbout) { AboutSheet() }
         .sensoryFeedback(.impact(weight: .light), trigger: model.generations)

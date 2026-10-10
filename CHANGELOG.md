@@ -10,21 +10,29 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 
 - On iPhone and iPad, Support and Privacy Policy links in the About sheet.
 - On Mac, an About window (Pyrgus › About Pyrgus, or ⓘ) with Support and Privacy Policy buttons.
+- On iPhone and iPad, a Regenerate button on the medium widget that opens Pyrgus with a new
+  password in the widget's format.
 
 ### Changed
 
 - The main screen no longer scrolls or bounces when everything fits.
 - On Mac, the window can't be made smaller than its content.
 - On iPhone, the app stays in portrait.
+- On iPhone and iPad, choosing the widget's Custom Password length or Memorable word count in
+  Edit Widget is now a pick from a list.
 
 ### Fixed
 
 - On Mac, the top of the window no longer changes color when the pointer is over it.
+- On iPhone and iPad, the widget's Copy now works: it opens Pyrgus in the widget's format and
+  copies the password shown there, and the widget no longer gets stuck on "Copied".
 
 ### Release housekeeping
 
 - `main` holds 1.0.1 (build 2) and 1.0.2 (build 3), merged before Git Flow and never published;
   the 1.0.2 release merge replaces them.
+- On the first 1.0.2 TestFlight build, on an iPhone: Edit Widget offers Length (6–32) and Words
+  (4–8) as pickers, and Copy with Length 30 or Words 4 pastes a password of that size.
 
 ## [1.0.0] - 2026-09-27
 

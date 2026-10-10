@@ -63,6 +63,7 @@ branch from `develop` and merge back with no PR; releases and hotfixes end in a 
 - Never persist, log or `print` a generated secret. Only the format and its options go to
   `UserDefaults`.
 - The widget never displays a secret, only its `SecretMask`.
+  It never copies either: Copy and Regenerate open the app.
 
 ## Code conventions
 

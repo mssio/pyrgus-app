@@ -38,10 +38,12 @@ Before claiming any task done: `swift test` passes and both builds print `** BUI
 - Cut each feature branch (`feat/…`, `fix/…`, `chore/…`, `docs/…`) from the open release branch
   (from `origin/main` if none is open). Finish a feature task by pushing it and merging it into the
   release branch with `git merge --no-ff`. **Open no PR.**
-- The last commit on a release branch is the version bump (`MARKETING_VERSION` and
-  `CURRENT_PROJECT_VERSION` in `project.yml`). Push it and open a **draft** PR with
-  `gh pr create --draft`; only release branches get a PR. The user marks it ready and merges it
-  with a **merge commit**, not squash.
+- A new release branch's first commit sets `PYRGUS_CHANNEL: beta` in `project.yml`. Each TestFlight
+  upload is its own commit raising `CURRENT_PROJECT_VERSION` (`chore: build <n> for TestFlight`).
+- The last commit on a release branch is the release commit: `PYRGUS_CHANNEL: release`, one more
+  `CURRENT_PROJECT_VERSION`, and `MARKETING_VERSION` if it changes. Push it and open a **draft** PR
+  with `gh pr create --draft`; only release branches get a PR. The user marks it ready and merges it
+  with a **merge commit**, not squash. The release is archived from the tag.
 - The build (`CURRENT_PROJECT_VERSION`) goes up with every upload, in upload order, and never
   resets. A released version can't be submitted again, so every App Store release raises
   `MARKETING_VERSION`.

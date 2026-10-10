@@ -4,7 +4,7 @@ import PasswordKit
 /// Each widget's configuration: a format and only that format's options.
 struct SelectFormatIntent: WidgetConfigurationIntent {
     static let title: LocalizedStringResource = "Choose Format"
-    static let description = IntentDescription("Choose what the widget copies.")
+    static let description = IntentDescription("Choose the widget's format and options.")
 
     @Parameter(title: "Format", default: .standard)
     var format: FormatChoice

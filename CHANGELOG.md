@@ -19,7 +19,8 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 - On Mac, the window can't be made smaller than its content.
 - On iPhone, the app stays in portrait.
 - On iPhone and iPad, choosing the widget's Custom Password length or Memorable word count in
-  Edit Widget is now a pick from a list.
+  Edit Widget is now a pick from a list. Widgets set up before the update show the default
+  length (24) or word count (6) until edited.
 
 ### Fixed
 
@@ -32,7 +33,10 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 - `main` holds 1.0.1 (build 2) and 1.0.2 (build 3), merged before Git Flow and never published;
   the 1.0.2 release merge replaces them.
 - On the first 1.0.2 TestFlight build, on an iPhone: Edit Widget offers Length (6–32) and Words
-  (4–8) as pickers, and Copy with Length 30 or Words 4 pastes a password of that size.
+  (4–8) as pickers, and Copy with Length 30 or Words 4 pastes a password of that size. Before
+  installing it, configure a widget on the App Store 1.0.0 build (for example Custom Password,
+  Length 16); after installing, confirm it still loads, keeps its format, and shows the default
+  Length 24.
 
 ## [1.0.0] - 2026-09-27
 

@@ -85,6 +85,7 @@ struct PyrgusWidgetView: View {
                 .font(.system(.body, design: .monospaced))
                 .minimumScaleFactor(0.5)
                 .lineLimit(3)
+                .accessibilityHidden(true)
             Spacer(minLength: 0)
             footer()
                 .font(.caption.bold())

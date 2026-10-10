@@ -52,6 +52,8 @@ targets:
     postBuildScripts:
       - name: Stamp beta build time
         basedOnDependencyAnalysis: false
+        inputFiles:
+          - $(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)
         script: |
           plist="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
           /usr/libexec/PlistBuddy -c "Delete :PyrgusBuildDate" "$plist" 2>/dev/null || true

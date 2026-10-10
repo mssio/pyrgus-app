@@ -16,7 +16,10 @@ struct AboutWindow: View {
                 .accessibilityHidden(true)
             VStack(spacing: 2) {
                 Text("Pyrgus").font(.title.bold())
-                Text("Version \(Bundle.main.appVersion)").foregroundStyle(.secondary)
+                Text("Version \(Bundle.main.versionLabel)").foregroundStyle(.secondary)
+                if let built = Bundle.main.buildDateLabel {
+                    Text("Built \(built)").foregroundStyle(.secondary)
+                }
             }
             Text(AppInfo.tagline).font(.headline)
             Text(AppInfo.privacyNote).foregroundStyle(.secondary)

@@ -54,4 +54,23 @@ public struct PasswordOptions: Sendable, Equatable {
                 ?? defaults.memorableSeparator
         )
     }
+
+    /// These options with `format`'s own fields taken from `other`; every other field is kept, so
+    /// adopting a PIN widget's options never changes the saved Custom Password or Memorable ones.
+    public func adopting(_ other: PasswordOptions, for format: PasswordFormat) -> PasswordOptions {
+        var result = self
+        switch format {
+        case .pin:
+            result.pinLength = other.pinLength
+        case .strong:
+            result.customLength = other.customLength
+            result.includeSymbols = other.includeSymbols
+        case .memorable:
+            result.memorableWordCount = other.memorableWordCount
+            result.memorableSeparator = other.memorableSeparator
+        case .standard, .secret128, .secret256:
+            break
+        }
+        return result
+    }
 }

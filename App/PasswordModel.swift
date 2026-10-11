@@ -26,7 +26,7 @@ final class PasswordModel {
         didSet {
             guard format != oldValue else { return }
             defaults.set(format.rawValue, forKey: Keys.format)
-            regenerate()
+            if !isSwitching { regenerate() }
         }
     }
 
@@ -34,13 +34,15 @@ final class PasswordModel {
         didSet {
             guard options != oldValue else { return }
             save(options)
-            regenerate()
+            if !isSwitching { regenerate() }
         }
     }
 
     var entropyCaption: String { "\(format.entropyDisplay(options)) bits of entropy" }
 
     @ObservationIgnored private let defaults: UserDefaults
+    /// Set while `open(_:)` switches format and options, so the switch regenerates once, not per field.
+    @ObservationIgnored private var isSwitching = false
 
     /// Reads every stored value through validation; the password itself is never stored.
     init(defaults: UserDefaults = .standard) {
@@ -73,6 +75,25 @@ final class PasswordModel {
             try? await Task.sleep(for: .seconds(2))
             // A newer copy owns the label now; a regenerate already cleared it.
             if copies == copyNumber { justCopied = false }
+        }
+    }
+
+    /// Applies a widget link: switches to its format and that format's own options (saved, as if
+    /// picked here; other formats' options are kept), then copies the password on screen, or
+    /// regenerates without copying.
+    func open(_ link: WidgetLink) {
+        let newOptions = options.adopting(link.options, for: link.format)
+        let switching = link.format != format || newOptions != options
+        if switching {
+            isSwitching = true
+            format = link.format
+            options = newOptions
+            isSwitching = false
+            regenerate()
+        }
+        switch link.action {
+        case .copy: copy()
+        case .regenerate: if !switching { regenerate() }
         }
     }
 

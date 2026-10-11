@@ -19,7 +19,10 @@ struct AboutSheet: View {
                     Link("Privacy Policy", destination: AppInfo.privacyURL)
                 }
                 Section {
-                    LabeledContent("Version", value: Bundle.main.appVersion)
+                    LabeledContent("Version", value: Bundle.main.versionLabel)
+                    if let built = Bundle.main.buildDateLabel {
+                        LabeledContent("Built", value: built)
+                    }
                 }
             }
             .navigationTitle("About Pyrgus")

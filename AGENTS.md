@@ -16,19 +16,33 @@ change to the design updates it in a paired commit.
 - `cd Packages/PasswordKit && swift test` — PasswordKit tests, on macOS, in seconds
 - `xcodegen generate` — regenerate `Pyrgus.xcodeproj`; run after changing `project.yml` and after
   adding or removing any file under `App/` or `Widget/`
-- `xcodebuild -project Pyrgus.xcodeproj -scheme Pyrgus -allowProvisioningUpdates -destination 'platform=iOS Simulator,name=iPhone 17' build`
-- `xcodebuild -project Pyrgus.xcodeproj -scheme Pyrgus -allowProvisioningUpdates -destination 'platform=macOS' build`
+- iOS build:
+
+  ```bash
+  xcodebuild -project Pyrgus.xcodeproj -scheme Pyrgus -allowProvisioningUpdates \
+    -destination 'platform=iOS Simulator,name=iPhone 17' build
+  ```
+
+- macOS build:
+
+  ```bash
+  xcodebuild -project Pyrgus.xcodeproj -scheme Pyrgus -allowProvisioningUpdates \
+    -destination 'platform=macOS' build
+  ```
 
 Before claiming any task done: `swift test` passes and both builds print `** BUILD SUCCEEDED **`.
 
 ## Layout
 
-- `Packages/PasswordKit/Sources/PasswordKit/` — formats, generation, entropy, wordlist, CSPRNG; no UI
+- `Packages/PasswordKit/Sources/PasswordKit/` — formats, generation, entropy, wordlist, CSPRNG; no
+  UI
 - `Packages/PasswordKit/Sources/PasswordClipboard/` — the only platform-divergent code
-- `Packages/PasswordKit/Tests/PasswordKitTests/` — Swift Testing; `test-vectors.json` and test support
+- `Packages/PasswordKit/Tests/PasswordKitTests/` — Swift Testing; `test-vectors.json` and test
+  support
 - `App/` — SwiftUI app for iOS, iPadOS and macOS
 - `Widget/` — iOS/iPadOS widget extension
-- `project.yml` — XcodeGen source of truth; `Pyrgus.xcodeproj` and the `Info.plist` files are generated
+- `project.yml` — XcodeGen source of truth; `Pyrgus.xcodeproj` and the `Info.plist` files are
+  generated
 
 ## Git workflow
 
@@ -57,7 +71,8 @@ branch from `develop` and merge back with no PR; releases and hotfixes end in a 
 - All production randomness goes through `SecureRandomNumberGenerator` (`SecRandomCopyBytes`). Never
   `SystemRandomNumberGenerator`, `arc4random`, or a `random` call without `using:`. Tests inject
   `SeededGenerator`. _A biased or predictable password is a silent failure._
-- Never reduce with `x % n`: use `Int.random(in:using:)`, `randomElement(using:)`, `shuffled(using:)`.
+- Never reduce with `x % n`: use `Int.random(in:using:)`, `randomElement(using:)`,
+  `shuffled(using:)`.
 - Fail closed: a randomness failure is a `preconditionFailure`, never a fallback value.
 - No network access, analytics or third-party packages. Ask before adding any Swift package.
 - Never persist, log or `print` a generated secret. Only the format and its options go to

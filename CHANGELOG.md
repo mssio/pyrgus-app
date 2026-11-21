@@ -14,7 +14,8 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 
 ### Changed
 
-- A new app icon: a white glass dice-tower cube on indigo, with a black background in dark mode.
+- A new app icon: a white glass dice-tower cube on indigo; on iPhone and iPad, the cube is shown
+  on black in dark mode.
 
 ### Release housekeeping
 

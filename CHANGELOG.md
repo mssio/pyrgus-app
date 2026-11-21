@@ -6,6 +6,22 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 
 ## [Unreleased]
 
+### Added
+
+- On iPhone Duo, Pyrgus fills the whole display, folded or unfolded.
+- On iPhone and iPad, dark and tinted versions of the app icon for Home Screens set to those
+  styles.
+
+### Changed
+
+- A new app icon: a white glass dice-tower cube on indigo; on iPhone and iPad, the cube is shown
+  on black in dark mode.
+
+### Release housekeeping
+
+- Check App Store Connect for an iPhone Duo screenshot size; if there is one, add screenshots from
+  the iPhone Duo simulator.
+
 ## [1.0.2] - 2026-10-10
 
 ### Added

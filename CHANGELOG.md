@@ -6,6 +6,19 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-21
+
+### Added
+
+- On iPhone Duo, Pyrgus fills the whole display, folded or unfolded.
+- On iPhone and iPad, dark and tinted versions of the app icon for Home Screens set to those
+  styles.
+
+### Changed
+
+- A new app icon: a white glass dice-tower cube on indigo; on iPhone and iPad, the cube is shown
+  on black in dark mode.
+
 ## [1.0.2] - 2026-10-10
 
 ### Added
@@ -38,6 +51,7 @@ All notable changes to Pyrgus for iPhone, iPad and Mac are recorded here. The fo
   Password, Memorable, PIN, Secret 128 and Secret 256.
 - A Home Screen widget on iPhone and iPad that copies a new secret without showing it.
 
-[Unreleased]: https://github.com/mssio/pyrgus-app/compare/v1.0.2...develop
+[Unreleased]: https://github.com/mssio/pyrgus-app/compare/v1.1.0...develop
+[1.1.0]: https://github.com/mssio/pyrgus-app/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/mssio/pyrgus-app/compare/v1.0.0...v1.0.2
 [1.0.0]: https://github.com/mssio/pyrgus-app/releases/tag/v1.0.0
